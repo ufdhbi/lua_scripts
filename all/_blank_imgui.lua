@@ -1,12 +1,14 @@
 script_name("Imgui")
-local imgui = require 'imgui'
-local encoding = require 'encoding'
-encoding.default = 'CP1251'
-local function u8d(s) return encoding.UTF8:decode(s) end
+local imgui = require "imgui"
+local encoding = require "encoding"
+encoding.default = "CP1251"
+local function u8d(s)
+    return encoding.UTF8:decode(s)
+end
 
 imgui_window = {
     bEnable = imgui.ImBool(false),
-	property = imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoMove,
+    property = imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoMove,
     style_dark = function()
         local style = imgui.GetStyle()
         local colors = style.Colors
@@ -53,34 +55,40 @@ imgui_window = {
         colors[clr.TextSelectedBg] = ImVec4(0.25, 1.00, 0.00, 0.43)
         colors[clr.ModalWindowDarkening] = ImVec4(1.00, 0.98, 0.95, 0.73)
     end,
-	colorTitle = imgui.ImVec4(0.86, 0.07, 0.23, 1.00),
-	size = imgui.ImVec2(670, 300)
+    colorTitle = imgui.ImVec4(0.86, 0.07, 0.23, 1.00),
+    size = imgui.ImVec2(670, 300)
 }
 
 imgui_window.style_dark()
 
 function imgui.OnDrawFrame()
-	if imgui_window.bEnable then
-		local sw, sh = getScreenResolution()
-		imgui.Begin('##' .. thisScript().name, imgui_window.bEnable, imgui_window.property)
-        imgui.SetCursorPosX((imgui.GetWindowWidth() - imgui.CalcTextSize(thisScript().name).x) / 2);
-        imgui.TextColored(imgui_window.colorTitle, thisScript().name);
+    if imgui_window.bEnable then
+        local sw, sh = getScreenResolution()
+        imgui.Begin("##" .. thisScript().name, imgui_window.bEnable, imgui_window.property)
+        imgui.SetCursorPosX((imgui.GetWindowWidth() - imgui.CalcTextSize(thisScript().name).x) / 2)
+        imgui.TextColored(imgui_window.colorTitle, thisScript().name)
         imgui.Spacing()
         imgui.Spacing()
-        
-		imgui.SetWindowPos('##' .. thisScript().name, imgui.ImVec2(sw/2 - imgui.GetWindowSize().x/2, sh/2 - imgui.GetWindowSize().y/2))
-		imgui.SetWindowSize('##' .. thisScript().name, imgui.ImVec2(400, -1))
-		imgui.End()
-	end
+
+        imgui.SetWindowPos(
+            "##" .. thisScript().name,
+            imgui.ImVec2(sw / 2 - imgui.GetWindowSize().x / 2, sh / 2 - imgui.GetWindowSize().y / 2)
+        )
+        imgui.SetWindowSize("##" .. thisScript().name, imgui.ImVec2(400, -1))
+        imgui.End()
+    end
 end
 
 function main()
-    if not isSampfuncsLoaded() or not isSampLoaded() then return end
-    while not isSampAvailable() do wait(100) end
+    if not isSampfuncsLoaded() or not isSampLoaded() then
+        return
+    end
+    while not isSampAvailable() do
+        wait(100)
+    end
     while true do
         wait(0)
         imgui.Process = imgui_window.bEnable.v
-        
     end
 end
 
@@ -91,6 +99,6 @@ function onWindowMessage(msg, wparam, lparam)
             if msg == 0x101 then
                 imgui_window.bEnable.v = false
             end
-		end
+        end
     end
 end
