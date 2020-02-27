@@ -29,14 +29,8 @@ end
 
 function onSendRpc()
 
-    if ffi.C.IsIconic(_globals.window) ~= 0 then
-        if _globals.timestamp == 0 then
-            _globals.timestamp = os.time()
-        else
-            if os.time() - _globals.timestamp >= 600 then
-                
-            end
-        end
+    if ffi.C.IsIconic(_globals.window) == 1 then
+        -- is window minimized
     end
 
     return ffi.C.IsIconic(_globals.window) == 0
