@@ -23,6 +23,7 @@ local no_shooting_weapons = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 1
 local change_position, chCursor, isSAMP = false
 local font_for_render = {nil, nil}
 local l_res_x, l_res_y = nil
+local wanted = nil
 
 function createFonts(y)
 	for _, v in pairs(font_for_render) do
@@ -86,7 +87,9 @@ function renderHUD()
 						if ammo ~= 0 then
 							renderFontDrawText(font_for_render[1], ammo, set.Position.posX  - res_x / (res_x / (res_x / 170)) - res_x / 64, set.Position.posY + res_y / (res_y / (res_y / 11.7)), 0xFFFFFFFF)
 						end
-						
+						if wanted ~= nil and wanted ~= 0 then
+							renderFontDrawText(font_for_render[1], ("Wanted: %s"):format(wanted), set.Position.posX  - res_x / (res_x / (res_x / 170)) - res_x / 64, set.Position.posY + res_y / (res_y / (res_y / 9.7)), 0xFFFFFFFF)
+						end
 						drawBar(set.Position.posX - res_x/48, set.Position.posY, res_x / 10.2, res_y / 63, 0xBFDF0101, 0xBF610B0B, 3, font_for_render[2], getCharHealth(PLAYER_PED), res_x, res_y) -- 23
 						drawBar(set.Position.posX - res_x/48, set.Position.posY + res_y / 60, res_x / 10.2, res_y / 59, 0xBF1E90FF, 0xBF4682B4, 3, font_for_render[2], getCharArmour(PLAYER_PED), res_x, res_y) -- 50
 						drawBar(set.Position.posX - res_x/48, set.Position.posY + res_y / 28, res_x / 10.2, res_y / 61, 0xBFDDA0DD, 0xBFEE82EE, 3, font_for_render[2], getSprintLocalPlayer(), res_x, res_y) -- 77
@@ -142,13 +145,13 @@ function getInfo()
 		else
 			for _, v in pairs(weapons_without_clip) do
 				if weapon ~= v then
-					ammo = ammo
+					ammo = string.format("%s / %s", wp.get_name(weapon), ammo)
 					break
 				end
 			end
 			for _, v in pairs(no_shooting_weapons) do
 				if weapon == v then 
-					ammo = "" 
+					ammo = ""
 				end
 			end
 		end
@@ -223,4 +226,11 @@ function changeHudPosition()
 	inicfg.save(set, direction)
 	change_position = false
 	renderHUD()
+end
+
+function onReceiveRpc(id, bs)
+	if id == 133 then
+		wanted = raknetBitStreamReadInt8(bs)
+		return true
+	end
 end
