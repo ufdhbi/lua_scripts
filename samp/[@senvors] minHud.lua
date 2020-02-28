@@ -135,17 +135,16 @@ function getInfo()
 		money = string.format("$%s", money)
 	end
 	local weapon = getCurrentCharWeapon(PLAYER_PED)
-	local ammo = getAmmoInCharWeapon(PLAYER_PED, weapon)
 
 	for _, v in pairs(weapons_with_clip) do
 		if weapon == v then
 			local ammoInClip = getAmmoInClip()
-			ammo = string.format("%s / %d(%s)", wp.get_name(weapon), ammoInClip, (ammo - ammoInClip))
+			ammo = string.format("%s / %d(%s)", wp.get_name(weapon), ammoInClip, (getAmmoInCharWeapon(PLAYER_PED, weapon) - ammoInClip))
 			break
 		else
 			for _, v in pairs(weapons_without_clip) do
 				if weapon ~= v then
-					ammo = string.format("%s / %s", wp.get_name(weapon), ammo)
+					ammo = string.format("%s / %s", wp.get_name(weapon), getAmmoInCharWeapon(PLAYER_PED, weapon))
 					break
 				end
 			end
