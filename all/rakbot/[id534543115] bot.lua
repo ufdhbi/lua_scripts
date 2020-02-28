@@ -5,7 +5,7 @@ local function u8d(s) return encoding.UTF8:decode(s) end
 local botInfo = {
     spawn = "",
     timestamp = 0,
-    routes_count = {SF = 2, LS = 2},
+    routes_count = {SF = 2, LS = 2}, -- тут не забудь изменить количество маршрутов которые добавишь в таблицу routes
     last_route = ""
 }
 local spawns = {
