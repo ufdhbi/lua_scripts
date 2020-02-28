@@ -1,7 +1,4 @@
 local ffi = require 'ffi'
-local encoding = require 'encoding'
-encoding.default = 'CP1251'
-local function u8d(s) return encoding.UTF8:decode(s) end
 
 ffi.cdef [[
     typedef int BOOL;
