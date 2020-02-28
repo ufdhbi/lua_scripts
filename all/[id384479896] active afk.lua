@@ -28,7 +28,7 @@ function main()
                     _vars.timestamp = os.time() 
                     _vars.nop = true 
                 else
-                    if os.time() - _vars.timestamp > 6 then
+                    if os.time() - _vars.timestamp > 600 then
                         _vars.nop = false
                         wait(10000)
                         if ffi.C.IsIconic(_vars.window) ~= 1 then
