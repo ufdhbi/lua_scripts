@@ -1,3 +1,4 @@
+-- order https://vk.com/id384479896
 local ffi = require 'ffi'
 
 ffi.cdef [[
