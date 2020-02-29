@@ -2,17 +2,42 @@ local menu = {}
 
 function menu:create()
     local data = {
-        position = {x = 5, y = 300},
-        size = {x = 50, y = 300},
-        color_menu = {main = 0xFF111111, border = 0xFF111111},
-        border_size = 1,
-        render = {font = "Arial", size = 11, flags = 5, color = {default = 0xFFCCCCCC, select = 0xFFDC143C}},
-        padding = 2,
+        position = {x = 75, y = 240},
+        size = {x = 165, y = 410},
+        color_menu = {main = 0xFF14141F, border = 0xFF111111},
+        border_size = 3,
+        render = {font = "Comic Sans MS", size = 9, flags = 5, color = {default = 0xFFCCCCCC, select = 0xFFDC143C}},
+        padding = 7,
+        line = 20,
         commands = {
-            "/mm",
-            "/loh",
-            "/sms"
-        }
+          -- команда, true - переносить на новую строку / false - не переносить
+            {"/MENU", false},
+            {"/GPS", true},
+            {"/INVENT", true},
+            {"/PHONE", false},
+            {"/NUMBER", false},
+            {"/PHH", false},
+            {"/VR", false},
+            {"/FAM", false},
+            {"/FAMMENU", false},
+            {"/OPENBOX", false},
+            {"/REPORT", false},
+            {"/HELP", false},
+            {"/EAT", false},
+            {"/SPRUNK", false},
+            {"/QUEST", false},
+            {"/ANIMS", false},
+            {"/PAY", false},
+            {"/TRADE", false},
+            {"/FINDIHOUSE", false},
+            {"/FINDIBIZ", false},
+            {"/SHOWPASS", false},
+            {"/CARPASS", false},
+            {"/HOUSE", false},
+            {"/REPCAR", false},
+            {"/FILLCAR", false},
+        },
+        active = false
     }
     local font = renderCreateFont(data.render.font, data.render.size, data.render.flags)
 
@@ -22,13 +47,14 @@ function menu:create()
     end
 
     local function button(x, y, text, select)
-        renderFontDrawText(font, text, data.padding + x, data.padding + y, mouseInArea2d(x, y, x + renderGetFontDrawTextLength(font, text) + data.padding, y + renderGetFontDrawHeight(font) + data.padding) and data.render.color.select or data.render.color.default)
+        renderFontDrawText(font, text, data.padding + x, y + data.padding, mouseInArea2d(x + data.padding, y + data.padding + 2, x + renderGetFontDrawTextLength(font, text), y + renderGetFontDrawHeight(font) + data.padding) and data.render.color.select or data.render.color.default)
         return data.padding + x, data.padding + y, renderGetFontDrawHeight(font) + data.padding, renderGetFontDrawTextLength(font, text) + data.padding
     end
 
     function data:draw()
         if isKeyDown(0x11) and not sampIsChatInputActive() and not sampIsDialogActive() then
             sampToggleCursor(true)
+            data.active = true
             renderDrawBoxWithBorder(
                 data.position.x,
                 data.position.y,
@@ -40,24 +66,24 @@ function menu:create()
             )
             local rx, ry = data.position.x + data.padding, data.position.y + data.padding
             for i, cmd in ipairs(data.commands) do
-                local x, y, h, w = button(rx, ry, cmd)
+                local x, y, h, w = button(rx, ry, cmd[1])
                 if isKeyJustPressed(0x01) and mouseInArea2d(x, y, x + w, y + h) then
-                    sampProcessChatInput(cmd)
+                    sampProcessChatInput(cmd[1])
                 elseif isKeyJustPressed(0x02) and mouseInArea2d(x, y, x + w, y + h) then
                     sampSetChatInputEnabled(true)
-                    sampSetChatInputText(cmd .. " ")
+                    sampSetChatInputText(cmd[1] .. " ")
                 end
                 ----------
                 if data.commands[i + 1] ~= nil then
-                    if data.padding * 4 + x + w + renderGetFontDrawTextLength(font, data.commands[i + 1]) <= data.size.x then
-                        rx, ry = data.padding * 2 + x + w, ry
+                    if not data.commands[i + 1][2] then
+                        rx, ry = x + w, ry
                     else
-                        rx, ry = data.position.x + data.padding, ry + 15
+                        rx, ry = data.position.x + data.padding, ry + data.line
                     end
                 end
             end
         end
-        if wasKeyReleased(0x11) then sampToggleCursor(false) end
+        if wasKeyReleased(0x11) and data.acitve then sampToggleCursor(false) data.active = false end
     end
 
     return data
