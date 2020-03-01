@@ -35,8 +35,5 @@ function main()
         end
     end)
     sampRegisterChatCommand("fstats", function() enable = true sampSendChat("/stats") end)
-    while true do
-        wait(0)
-        
-    end
+    wait(-1)
 end

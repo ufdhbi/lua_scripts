@@ -1,7 +1,7 @@
 local menu = {}
 
 function menu:create()
-    local data = {
+    local self = {
         position = {x = 75, y = 240},
         size = {x = 165, y = 410},
         color_menu = {main = 0xFF14141F, border = 0xFF111111},
@@ -36,10 +36,9 @@ function menu:create()
             {"/HOUSE", false},
             {"/REPCAR", false},
             {"/FILLCAR", false},
-        },
-        active = false
+        }
     }
-    local font = renderCreateFont(data.render.font, data.render.size, data.render.flags)
+    local font = renderCreateFont(self.render.font, self.render.size, self.render.flags)
 
     local function mouseInArea2d(x1, y1, x2, y2)
         local mx, my = getCursorPos()
@@ -47,25 +46,24 @@ function menu:create()
     end
 
     local function button(x, y, text, select)
-        renderFontDrawText(font, text, data.padding + x, y + data.padding, mouseInArea2d(x + data.padding, y + data.padding, x + renderGetFontDrawTextLength(font, text), y + renderGetFontDrawHeight(font) + data.padding) and data.render.color.select or data.render.color.default)
-        return data.padding + x, data.padding + y, renderGetFontDrawHeight(font) + data.padding, renderGetFontDrawTextLength(font, text) + data.padding
+        renderFontDrawText(font, text, self.padding + x, y + self.padding, mouseInArea2d(x + self.padding, y + self.padding, x + renderGetFontDrawTextLength(font, text), y + renderGetFontDrawHeight(font) + self.padding) and self.render.color.select or self.render.color.default)
+        return self.padding + x, self.padding + y, renderGetFontDrawHeight(font) + self.padding, renderGetFontDrawTextLength(font, text) + self.padding
     end
 
-    function data:draw()
+    function self:draw()
         if isKeyDown(0x11) and not sampIsChatInputActive() and not sampIsDialogActive() then
             sampToggleCursor(true)
-            data.active = true
             renderDrawBoxWithBorder(
-                data.position.x,
-                data.position.y,
-                data.size.x,
-                data.size.y,
-                data.color_menu.main,
-                data.border_size,
-                data.color_menu.border
+                self.position.x,
+                self.position.y,
+                self.size.x,
+                self.size.y,
+                self.color_menu.main,
+                self.border_size,
+                self.color_menu.border
             )
-            local rx, ry = data.position.x + data.padding, data.position.y + data.padding
-            for i, cmd in ipairs(data.commands) do
+            local rx, ry = self.position.x + self.padding, self.position.y + self.padding
+            for i, cmd in ipairs(self.commands) do
                 local x, y, h, w = button(rx, ry, cmd[1])
                 if isKeyJustPressed(0x01) and mouseInArea2d(x, y, x + w, y + h) then
                     sampProcessChatInput(cmd[1])
@@ -74,19 +72,18 @@ function menu:create()
                     sampSetChatInputText(cmd[1] .. " ")
                 end
                 ----------
-                if data.commands[i + 1] ~= nil then
-                    if not data.commands[i + 1][2] then
+                if self.commands[i + 1] ~= nil then
+                    if not self.commands[i + 1][2] then
                         rx, ry = x + w, ry
                     else
-                        rx, ry = data.position.x + data.padding, ry + data.line
+                        rx, ry = self.position.x + self.padding, ry + self.line
                     end
                 end
             end
         end
-        if wasKeyReleased(0x11) and data.acitve then sampToggleCursor(false) data.active = false end
+        if wasKeyReleased(0x11) then sampToggleCursor(false) end
     end
-
-    return data
+    return self
 end
 
 function main()
