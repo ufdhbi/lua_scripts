@@ -47,7 +47,7 @@ function menu:create()
     end
 
     local function button(x, y, text, select)
-        renderFontDrawText(font, text, data.padding + x, y + data.padding, mouseInArea2d(x + data.padding, y + data.padding + 2, x + renderGetFontDrawTextLength(font, text), y + renderGetFontDrawHeight(font) + data.padding) and data.render.color.select or data.render.color.default)
+        renderFontDrawText(font, text, data.padding + x, y + data.padding, mouseInArea2d(x + data.padding, y + data.padding, x + renderGetFontDrawTextLength(font, text), y + renderGetFontDrawHeight(font) + data.padding) and data.render.color.select or data.render.color.default)
         return data.padding + x, data.padding + y, renderGetFontDrawHeight(font) + data.padding, renderGetFontDrawTextLength(font, text) + data.padding
     end
 
