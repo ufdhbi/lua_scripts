@@ -1,6 +1,4 @@
-local active = false
-local numpad = false
-local number
+local active, numpad, number
 
 local data = {
     onfoot = {
