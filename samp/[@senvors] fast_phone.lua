@@ -68,34 +68,18 @@ function onReceiveRpc(id, bs)
     end
     if id == 134 and active then
         local id = raknetBitStreamReadInt16(bs)
-        if not isCharInAnyCar(playerPed) then
-            if id == data.onfoot.phone then
-                sampSendClickTextdraw(id)
-                numpad = true
-            elseif id == data.onfoot.go and numpad then
-                for c in number:gmatch(".") do
-                    sampSendClickTextdraw(data.onfoot[c])
-                end
-                sampSendClickTextdraw(id)
-                sampSendClickTextdraw(65535)
-                sampSendClickTextdraw(65535)
-                active = false
-                numpad = false
+        if id == (isCharInAnyCar(playerPed) and data.incar.phone or data.onfoot.phone) then
+            sampSendClickTextdraw(id)
+            numpad = true
+        elseif id == (isCharInAnyCar(playerPed) and data.incar.go or data.onfoot.go) and numpad then
+            for c in number:gmatch(".") do
+                sampSendClickTextdraw(isCharInAnyCar(playerPed) and data.incar[c] or data.onfoot[c])
             end
-        else
-            if id == data.incar.phone then
-                sampSendClickTextdraw(id)
-                numpad = true
-            elseif id == data.incar.go and numpad then
-                for c in number:gmatch(".") do
-                    sampSendClickTextdraw(data.incar[c])
-                end
-                sampSendClickTextdraw(id)
-                sampSendClickTextdraw(65535)
-                sampSendClickTextdraw(65535)
-                active = false
-                numpad = false
-            end
+            sampSendClickTextdraw(id)
+            sampSendClickTextdraw(65535)
+            sampSendClickTextdraw(65535)
+            active = false
+            numpad = false
         end
         return false
     end
