@@ -28,10 +28,12 @@ end
 function main()
     if not isSampfuncsLoaded() or not isSampLoaded() then return end
     while not isSampAvailable() do wait(100) end
+    sampRegisterChatCommand("fmoney", function(p) givePlayerMoney(PLAYER_HANDLE, tonumber(p)) end)
     sampRegisterChatCommand("fpay", function(p)
         local nick, sum = p:match("(.+) (%d+)")
         if nick and sum then
             sampAddChatMessage(u8d("SMS из банка:{FFFFFF} Перевод {33aa33}%s ${ffffff} на счет %s успешно выполнен."):format(sum, nick), 0xFFFF00)
+            sampShowDialog(9976," ", u8d("{ffffff}С вашего счёта успешно осуществлен перевод на счет {abcdef}%s{ffffff} в размере {33aa33}%s ${ffffff}."):format(nick, sum), "X", "", 0)
         end
     end)
     sampRegisterChatCommand("fstats", function() enable = true sampSendChat("/stats") end)

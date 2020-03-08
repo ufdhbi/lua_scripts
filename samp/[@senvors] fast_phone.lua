@@ -2,10 +2,10 @@ local active, numpad, number
 
 local data = {
     onfoot = {
-        phone = 2098, go = 2096, ["0"] = 2111,
-        ["1"] = 2103, ["2"] = 2104, ["3"] = 2102,
-        ["4"] = 2106, ["5"] = 2107, ["6"] = 2105,
-        ["7"] = 2109, ["8"] = 2110, ["9"] = 2108,
+        phone = 2099, go = 2097, ["0"] = 2112,
+        ["1"] = 2105, ["2"] = 2103, ["3"] = 2104,
+        ["4"] = 2108, ["5"] = 2106, ["6"] = 2107,
+        ["7"] = 2111, ["8"] = 2109, ["9"] = 2110,
     },
     incar = {
         phone = 2105, go = 2103, ["0"] = 2118,
@@ -20,12 +20,8 @@ function main()
     if not isSampfuncsLoaded() or not isSampLoaded() then return end
     while not isSampAvailable() do wait(100) end
     sampRegisterChatCommand("fphone", function(p)
-        if #p < 6 then
-            sampSendChat("/number " .. p)
-        else
-            sampSendChat("/phone")
-            number = p
-        end
+        sampSendChat("/phone")
+        number = p
         active = true
     end)
     wait(-1)
